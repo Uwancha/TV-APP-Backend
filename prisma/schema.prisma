@@ -1,0 +1,52 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  favorites Program[] @relation("UserFavorites")
+  watchLater Program[] @relation("UserWatchLater")
+}
+
+model Program {
+  id          Int      @id @default(autoincrement())
+  title       String
+  duration    Int
+  description String
+  videoUrl    String
+  channel     Channel  @relation(fields: [channelId], references: [id])
+  channelId   Int
+  type        Type     @relation(fields: [typeId], references: [id])
+  typeId      Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  usersWhoFavorited User[] @relation("UserFavorites")
+  usersWhoWatchLater User[] @relation("UserWatchLater")
+}
+
+model Channel {
+  id    Int      @id @default(autoincrement())
+  name  String
+  programs Program[]
+}
+
+model Type {
+  id      Int      @id @default(autoincrement())
+  name    String
+  programs Program[]
+}
+
+model Category {
+  id      Int      @id @default(autoincrement())
+  name    String
+  programs Program[]
+}
