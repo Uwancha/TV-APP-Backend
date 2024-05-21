@@ -13,6 +13,7 @@ model User {
   email     String   @unique
   password  String
   name      String?
+  role      String   @default("user")
   favorites Program[] @relation("UserFavorites")
   watchLater Program[] @relation("UserWatchLater")
 }
@@ -23,6 +24,7 @@ model Program {
   duration    Int
   description String
   videoUrl    String
+  posterURL   String
   channel     Channel  @relation(fields: [channelId], references: [id])
   channelId   Int
   type        Type     @relation(fields: [typeId], references: [id])
@@ -36,6 +38,7 @@ model Program {
 model Channel {
   id    Int      @id @default(autoincrement())
   name  String
+  logo  String?
   programs Program[]
 }
 
