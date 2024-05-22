@@ -3,7 +3,7 @@ import { CreateChannel, GetChannels, UpdateChannel, DeleteChannel } from '../con
 
 const router = express.Router();
 
-// Endpoint to get available channels
+// Endpoint to get available channels, filter, sort, and paginate
 router.get('/channels', GetChannels);
 
 // End point to create a channel

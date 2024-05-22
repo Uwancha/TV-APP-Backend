@@ -16,9 +16,39 @@ export const CreateChannel =  async (req: Request, res: Response) => {
   
 // Get all channels
 export const GetChannels=  async (req: Request, res: Response) => {
-  const channels = await prisma.channel.findMany();
+  const { page = 1, pageSize = 10, search, sortField, sortOrder } = req.query;
+  
+  const skip = (Number(page) - 1) * Number(pageSize);
+  const take = Number(pageSize);
+  
+  const orderBy = sortField
+    ? {
+        [sortField as string]: sortOrder,
+      }
+    : {};
+    
+  const where: any = search
+    ? {
+          OR: [
+            { name: { contains: search as string, mode: 'insensitive' } },
+          ],
+      }
+    : {};
 
-  return  res.status(200).json(channels);
+  try {
+    const channels = await prisma.channel.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+    });
+
+    const total = await prisma.channel.count({ where });
+
+  return res.json({ channels, total });   
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });     
+  };
 };
   
 // Update a channel
