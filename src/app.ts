@@ -4,6 +4,7 @@ import { ChannelRoutes } from './routes/channels';
 import { TypeRoutes } from './routes/types';
 import { UserRoutes } from './routes/users';
 import { AuthRoutes } from './routes/auth';
+import { DashboardRoutes } from './routes/dashboard';
 
 const app: Application = express();
 
@@ -15,6 +16,7 @@ app.use('/api', ChannelRoutes);
 app.use('/api', TypeRoutes);
 app.use('/api', UserRoutes);
 app.use('/api', AuthRoutes);
+app.use('/api', DashboardRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, function () {
