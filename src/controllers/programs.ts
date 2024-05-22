@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 // Get programs by channel
 export const GetProgramsByChannel = async (req: Request, res: Response) => {
   const { id, categoryId } = req.params;
-  //const categoryId = req.body;
     
   const programs = await prisma.program.findMany({
     where: { channelId: parseInt(id), categoryId: parseInt(categoryId) },
@@ -37,11 +36,44 @@ export const CreateProgram = async (req: Request, res: Response) => {
   return res.status(200).json(program);
 };
   
-// Read all programs
+// Reads all programs, filters, sorts and paginate.
 export const GetAllPrograms = async (req: Request, res: Response) => {
-  const programs = await prisma.program.findMany();
+  const { page = 1, pageSize = 10, search, sortField, sortOrder } = req.query;
 
-  res.status(200).json(programs);
+  const skip = (Number(page) - 1) * Number(pageSize);
+  const take = Number(pageSize);
+
+  const where: any = search 
+    ? {
+        OR: [
+          { title: { contains: search as string, mode: 'insensitive' } },
+          { description: { contains: search as string, mode: 'insensitive' } },
+        ],
+      }
+    :
+      {};
+
+  const orderBy = sortField
+    ? {
+        [sortField as string]: sortOrder,
+      }
+    : 
+    {};
+
+  try {
+    const programs = await prisma.program.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+    });
+
+    const total = await prisma.program.count({ where });
+
+    res.json({ programs, total });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
 };
   
 // Update a program

@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-// Endpoint to get all available programs for dashboard
+// Endpoint to get all available programs, filter, sort and paginate
 router.get('/programs', GetAllPrograms);
 
 // Endpoint to filter a program by category for a channel
