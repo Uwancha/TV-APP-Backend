@@ -7,8 +7,7 @@
     "start": "dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "rm -rf dist && tsc",
-    "seed": "ts-node prisma/seed.ts",
-    "proseed": "ts-node prisma/programseed.ts"
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +23,8 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5",
-    "prisma": "^5.14.0"
+    "prisma": "^5.14.0",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
