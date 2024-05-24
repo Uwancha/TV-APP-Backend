@@ -1,5 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
+import { io } from '../app';
+
+const notifyDashboardUpdate = () => {
+  io.emit('dashboardUpdate');
+};
 
 const prisma = new PrismaClient();
 
@@ -7,14 +12,20 @@ const prisma = new PrismaClient();
 export const CreateChannel =  async (req: Request, res: Response) => {
   const { name, logo } = req.body;
 
-  const channel = await prisma.channel.create({
-    data: { name, logo }
-  });
+  try {
+    const channel = await prisma.channel.create({
+      data: { name, logo }
+    });
+  
+    notifyDashboardUpdate();
 
-  return res.status(200).json(channel);
+    return res.status(200).json(channel);
+  } catch (error) {
+    return res.status(500).json({error: 'Server error'})
+  }
 };
   
-// Get all channels
+// Get all channels, sort, filter and paginate 
 export const GetChannels=  async (req: Request, res: Response) => {
   const { page = 1, pageSize = 10, search, sortField, sortOrder } = req.query;
   
@@ -67,7 +78,14 @@ export const UpdateChannel =  async (req: Request, res: Response) => {
 // Delete a channel
 export const DeleteChannel =  async (req: Request, res: Response) => {
   const { id } = req.params;
-  await prisma.channel.delete({ where: { id: parseInt(id) } });
+
+  try {
+    await prisma.channel.delete({ where: { id: parseInt(id) } });
   
-  return res.status(204).send();
+    notifyDashboardUpdate();
+  
+    return res.status(204).send();
+  } catch (error) {
+    return res.status(500).json({error: 'Server error'})
+  }
 };

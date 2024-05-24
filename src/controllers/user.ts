@@ -29,24 +29,22 @@ export const GetWatchLaters = async (req: Request, res: Response) => {
 
 // Add to favorites
 export const AddToFavorites = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { programId } = req.body;
+  const { id, programId } = req.params;
   
   await prisma.user.update({
     where: { id: parseInt(id) },
-    data: { favorites: { connect: { id: programId } } }
+    data: { favorites: { connect: { id: Number(programId) } } }
   });
     
   return res.status(204).send();
 };
   
 export const AddToWatchLater = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { programId } = req.body;
+  const { id, programId } = req.params;
 
   await prisma.user.update({
     where: { id: parseInt(id) },
-    data: { watchLater: { connect: { id: programId } } }
+    data: { watchLater: { connect: { id: Number(programId) } } }
   });
 
   return res.status(204).send();

@@ -23,7 +23,7 @@ router.get('/programs/category/:id', GetProgramsByCategory);
 router.post('/programs',CreateProgram);
 
 // Endpoint to update a program
-router.put('/programs/:id',UpdateProgram);
+router.put('/programs/:id', UpdateProgram);
 
 // Endpoint to delete a program
 router.delete('/programs/:id', DeleteProgram);

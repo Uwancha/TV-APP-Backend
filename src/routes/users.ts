@@ -10,10 +10,10 @@ router.get('/users/:id/favorites', GetFavorites);
 router.get('/users/:id/watchlater', GetWatchLaters);
 
 // End point to add a program favorite
-router.post('/users/:id/:programId', AddToFavorites);
+router.post('/users/favorites/:id/:programId', AddToFavorites);
 
 // End point to add a program watch later
-router.post('/users/:id/:programId', AddToWatchLater);
+router.post('/users/watchlater/:id/:programId', AddToWatchLater);
 
 // End point to remove a program from favorite
 router.delete('/users/:id/:programId', RemoveFromFavorites);
